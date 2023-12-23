@@ -13,5 +13,21 @@ services:
             dockerfile: ./php/Dockerfile
         volumes:
             - ./app:/app
+
     # postgresql
+    db:
+        image: postgres:alpine3.19
+        volumes:
+            - postgresqldata:/var/lib/postgresql
+        ports:
+            - "5432:5432"
+        restart: unless-stopped
+        environment:
+            POSTGRES_PASSWORD: workoutManager123
+            POSTGRES_USER: supermanager
+            POSTGRES_DB: workoutdb
+
     # redis
+
+volumes:
+    postgresqldata:
