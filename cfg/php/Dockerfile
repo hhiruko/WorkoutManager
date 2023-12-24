@@ -13,7 +13,7 @@ FROM app as app_dev
 
 ENV XDEBUG_MODE=off
 
-COPY ./php/conf.d/xdebug.ini $PHP_INI_DIR/conf.d/xdebug.ini
+COPY ./cfg/php/conf.d/xdebug.ini $PHP_INI_DIR/conf.d/xdebug.ini
 
 RUN apk add --update linux-headers \
     && pecl install xdebug \
