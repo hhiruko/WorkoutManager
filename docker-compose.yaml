@@ -1,9 +1,7 @@
 services:
     # nginx
     web:
-        # in the future, create image and pull from there
-        build:
-            dockerfile: ./nginx/Dockerfile
+        image: hhiruko/nginx-php-fpm:1.0
         ports:
             - "80:80"
 
