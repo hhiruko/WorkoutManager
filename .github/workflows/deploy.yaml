@@ -1,0 +1,15 @@
+name: WorkoutManager
+on:
+  push:
+    branches:
+      - main
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - run: docker build --target app -t hhiruko/php:1.0 -f ./php/Dockerfile .
+      - run: docker build -t hhiruko/nginx-php-fpm:1.0 -f ./nginx/Dockerfile .
+      - run: docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
+      - run: docker push hhiruko/php:1.0
+      - run: docker push hhiruko/nginx-php-fpm:1.0
