@@ -11,8 +11,10 @@ services:
     app:
         build:
             dockerfile: ./php/Dockerfile
+            target: app_dev
         volumes:
             - ./app:/var/www/html
+            - ./php/conf.d/xdebug.ini:/usr/local/etc/php/conf.d/xdebug.ini:ro
         environment:
             POSTGRES_HOST: db
             POSTGRES_PORT: ${POSTGRES_PORT}
@@ -21,6 +23,9 @@ services:
             POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
             REDIS_HOST: cache
             REDIS_PORT: ${REDIS_PORT}
+            XDEBUG_MODE: "${XDEBUG_MODE:-off}"
+        extra_hosts:
+            - host.docker.internal:host-gateway
 
     # postgresql
     db:

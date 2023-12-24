@@ -1,4 +1,4 @@
-FROM php:8.2-fpm-alpine
+FROM php:8.2-fpm-alpine as app
 
 RUN apk add --no-cache pcre-dev $PHPIZE_DEPS \
     && apk --no-cache add postgresql-dev \
@@ -7,3 +7,14 @@ RUN apk add --no-cache pcre-dev $PHPIZE_DEPS \
     && docker-php-ext-enable pdo_pgsql redis
 
 COPY ./app .
+
+
+FROM app as app_dev
+
+ENV XDEBUG_MODE=off
+
+COPY ./php/conf.d/xdebug.ini $PHP_INI_DIR/conf.d/xdebug.ini
+
+RUN apk add --update linux-headers \
+    && pecl install xdebug \
+    && docker-php-ext-enable xdebug
