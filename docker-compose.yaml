@@ -9,22 +9,33 @@ services:
 
     # php
     app:
-        build:
-            dockerfile: ./php/Dockerfile
-            target: app
+        image: hhiruko/php:1.0
+        environment:
+            POSTGRES_HOST: db
+            POSTGRES_PORT: ${POSTGRES_PORT}
+            POSTGRES_DB: ${POSTGRES_DB}
+            POSTGRES_USER: ${POSTGRES_USER}
+            POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+            REDIS_HOST: cache
+            REDIS_PORT: ${REDIS_PORT}
+            XDEBUG_MODE: "${XDEBUG_MODE:-off}"
+        extra_hosts:
+            - host.docker.internal:host-gateway
 
     # postgresql
     db:
         image: postgres:alpine3.19
         volumes:
             - postgresqldata:/var/lib/postgresql
-        restart: unless-stopped
+        restart: always
         environment:
-            POSTGRES_PASSWORD: workoutManager123
-            POSTGRES_USER: supermanager
-            POSTGRES_DB: workoutdb
+            POSTGRES_DB: ${POSTGRES_DB}
+            POSTGRES_USER: ${POSTGRES_USER}
+            POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
 
     # redis
+    cache:
+        image: redis:latest
 
 volumes:
     postgresqldata:
